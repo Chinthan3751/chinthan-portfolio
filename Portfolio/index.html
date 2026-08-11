@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Chinthan B R — Embedded Systems & Software Engineer</title>
+<meta name="description" content="Chinthan B R — Electronics & Communication Engineering student building across embedded systems, software and hardware. Ask the AI assistant anything." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root{
+  --void:#05070b;
+  --panel:#0a0f18;
+  --panel-2:#0d1420;
+  --panel-3:#101a29;
+  --cyan:#4fe7ee;
+  --cyan-dim:#2a6a72;
+  --violet:#9b8cf9;
+  --violet-dim:#4c4380;
+  --text:#e9eef6;
+  --text-dim:#93a3ba;
+  --text-faint:#546077;
+  --border:rgba(79,231,238,0.16);
+  --border-soft:rgba(255,255,255,0.06);
+  --glass:rgba(10,15,24,0.66);
+  --radius:16px;
+  --radius-sm:10px;
+  --ease:cubic-bezier(.22,.9,.3,1);
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -5%, rgba(30,42,58,0.55), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(20,30,44,0.45), transparent 55%),
+    linear-gradient(160deg, #0b0e13 0%, #06070a 45%, #08090d 100%);
+  color:var(--text);
+  font-family:var(--font-body);
+  overflow-x:hidden;
+  min-height:100vh;
+  line-height:1.5;
+}
+.metal-sheen{
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:1;
+  background:
+    linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.02) 45%, rgba(255,255,255,0.035) 48%, transparent 60%);
+  mix-blend-mode:screen;
+}
+.pcb-etch{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.5;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 46px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.014) 0px, rgba(255,255,255,0.014) 1px, transparent 1px, transparent 46px),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.25) 0px, rgba(0,0,0,0.25) 1px, transparent 1px, transparent 90px);
+}
+::selection{background:rgba(79,231,238,0.28);color:#fff;}
+::-webkit-scrollbar{width:10px;}
+::-webkit-scrollbar-track{background:var(--void);}
+::-webkit-scrollbar-thumb{background:#1a2434;border-radius:8px;border:2px solid var(--void);}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;}
+img{max-width:100%;display:block;}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px;}
+
+.mono{font-family:var(--font-mono);}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--cyan);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+.eyebrow::before{
+  content:'';
+  width:22px;height:1px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+}
+.section-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:clamp(28px,4.2vw,44px);
+  letter-spacing:-0.01em;
+  margin-bottom:14px;
+}
+.section-sub{
+  color:var(--text-dim);
+  font-size:16px;
+  max-width:560px;
+  margin-bottom:52px;
+}
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 32px;
+}
+section{
+  position:relative;
+  padding:120px 0;
+}
+@media (max-width:768px){
+  section{padding:80px 0;}
+  .wrap{padding:0 20px;}
+}
+
+/* ============================================================
+   CIRCUIT BACKGROUND CANVAS
+   ============================================================ */
+#circuit-layer{
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  pointer-events:none;
+  z-index:0;
+}
+.page-shell{position:relative;z-index:1;}
+.grain{
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:2;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+.vignette{
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:1;
+  background:radial-gradient(ellipse at 50% 0%, transparent 40%, rgba(0,0,0,0.55) 100%);
+}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor-dot,.cursor-ring{
+  position:fixed;top:0;left:0;
+  pointer-events:none;
+  z-index:9999;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  will-change:transform;
+}
+.cursor-dot{
+  width:6px;height:6px;
+  background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);
+  transition:opacity .2s;
+}
+.cursor-ring{
+  width:34px;height:34px;
+  border:1px solid rgba(79,231,238,0.5);
+  transition:width .2s var(--ease),height .2s var(--ease),border-color .2s,background .2s,opacity .2s;
+}
+.cursor-ring.hover{
+  width:56px;height:56px;
+  background:rgba(79,231,238,0.06);
+  border-color:var(--violet);
+}
+@media (pointer:coarse){
+  .cursor-dot,.cursor-ring{display:none;}
+}
+@media (pointer:fine){
+  a, button, .card, input, [data-hover], body{ cursor:none; }
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+header.topnav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  padding:18px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  backdrop-filter:blur(14px);
+  background:linear-gradient(to bottom, rgba(5,7,11,0.85), rgba(5,7,11,0));
+  transition:background .3s, border-color .3s;
+  border-bottom:1px solid transparent;
+}
+header.topnav.scrolled{
+  background:rgba(6,9,14,0.82);
+  border-bottom:1px solid var(--border-soft);
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-weight:600;font-size:15px;
+  letter-spacing:0.04em;
+}
+.logo-mark{
+  width:30px;height:30px;
+  border-radius:7px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);
+  background:rgba(79,231,238,0.05);
+}
+.nav-links{display:flex;gap:30px;font-size:14px;color:var(--text-dim);}
+.nav-links a{transition:color .2s;position:relative;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{
+  display:flex;gap:12px;align-items:center;
+}
+.btn-ghost-nav{
+  border:1px solid var(--border);
+  padding:9px 16px;
+  border-radius:999px;
+  font-size:13px;
+  font-family:var(--font-mono);
+  color:var(--cyan);
+  transition:all .2s;
+}
+.btn-ghost-nav:hover{background:rgba(79,231,238,0.08);border-color:var(--cyan);}
+.nav-toggle{display:none;background:none;border:1px solid var(--border);border-radius:8px;width:38px;height:38px;color:var(--text);}
+@media (max-width:860px){
+  .nav-links{display:none;}
+  .nav-toggle{display:block;}
+}
+.mobile-menu{
+  position:fixed;inset:0;
+  background:rgba(5,8,13,0.98);
+  z-index:99;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:28px;
+  font-family:var(--font-display);font-size:26px;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s;
+}
+.mobile-menu.open{opacity:1;pointer-events:auto;}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  padding-top:80px;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:12px;color:var(--text-dim);
+  border:1px solid var(--border);
+  padding:7px 14px;border-radius:999px;
+  margin-bottom:28px;
+  background:rgba(255,255,255,0.02);
+}
+.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:#5be08a;box-shadow:0 0 8px #5be08a;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.35;}}
+.hero h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(42px,8vw,92px);
+  line-height:0.98;
+  letter-spacing:-0.02em;
+  max-width:920px;
+}
+.hero h1 .accent{
+  background:linear-gradient(90deg,var(--cyan),var(--violet));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.hero p.role{
+  font-family:var(--font-mono);
+  color:var(--cyan);
+  font-size:clamp(15px,2vw,19px);
+  margin-top:22px;
+  letter-spacing:0.01em;
+}
+.hero p.desc{
+  color:var(--text-dim);
+  max-width:560px;
+  font-size:17px;
+  margin-top:18px;
+}
+.hero-actions{
+  display:flex;gap:16px;margin-top:44px;flex-wrap:wrap;
+}
+.btn{
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:14.5px;
+  padding:15px 26px;
+  border-radius:12px;
+  display:inline-flex;align-items:center;gap:10px;
+  cursor:pointer;
+  transition:transform .2s var(--ease), box-shadow .25s, background .25s, border-color .25s;
+  border:1px solid transparent;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--cyan),#3ab6c9);
+  color:#04141a;
+  box-shadow:0 0 0 rgba(79,231,238,0);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(79,231,238,0.28);}
+.btn-outline{
+  border:1px solid var(--border);
+  color:var(--text);
+  background:rgba(255,255,255,0.02);
+}
+.btn-outline:hover{border-color:var(--violet);background:rgba(155,140,249,0.08);transform:translateY(-2px);}
+.hero-stats{
+  display:flex;gap:44px;margin-top:72px;flex-wrap:wrap;
+}
+.hero-stats .stat{font-family:var(--font-mono);}
+.hero-stats .stat b{display:block;font-size:26px;color:var(--text);font-family:var(--font-display);}
+.hero-stats .stat span{font-size:12px;color:var(--text-faint);letter-spacing:0.06em;text-transform:uppercase;}
+.scroll-hint{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--text-faint);font-family:var(--font-mono);font-size:11px;
+  letter-spacing:0.12em;
+}
+.scroll-hint .line{width:1px;height:34px;background:linear-gradient(var(--cyan),transparent);animation:scrolldown 1.8s infinite;}
+@keyframes scrolldown{0%{opacity:0;transform:scaleY(0);transform-origin:top;}40%{opacity:1;transform:scaleY(1);transform-origin:top;}100%{opacity:0;transform:scaleY(1);transform-origin:bottom;}}
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  filter:blur(6px);
+  transition:opacity .8s var(--ease), transform .8s var(--ease), filter .8s var(--ease);
+}
+.reveal.in{opacity:1;transform:translateY(0);filter:blur(0);}
+.reveal-stagger > *{transition-delay:calc(var(--i) * 70ms);}
+
+/* ============================================================
+   GLASS CARD / BLOCK
+   ============================================================ */
+.card{
+  background:var(--glass);
+  border:1px solid var(--border-soft);
+  border-radius:var(--radius);
+  backdrop-filter:blur(16px);
+  position:relative;
+  z-index:1;
+  transition:transform .4s var(--ease), border-color .4s, box-shadow .4s, background .4s, opacity .4s, filter .4s;
+}
+.card::before{
+  content:'';
+  position:absolute;inset:0;
+  border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(135deg, rgba(79,231,238,0) 0%, rgba(79,231,238,0) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+  transition:background .4s;
+}
+.card:hover{
+  transform:translateY(-14px) scale(1.08);
+  z-index:20;
+  border-color:rgba(79,231,238,0.6);
+  background:rgba(16,23,36,0.85);
+  box-shadow:0 40px 90px -20px rgba(0,0,0,0.7), 0 0 70px -10px rgba(79,231,238,0.45), 0 0 0 1px rgba(79,231,238,0.15);
+}
+.card:hover::before{
+  background:linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+}
+.card.dim{
+  opacity:0.45;
+  filter:saturate(0.7);
+  transform:scale(0.96);
+}
+.empty-state{
+  padding:48px 32px;
+  text-align:center;
+  border-style:dashed;
+  border-color:var(--border);
+}
+.empty-state p{color:var(--text-dim);font-size:14.5px;margin:0;}
+.timeline.empty{padding-left:0;}
+.timeline.empty::before{display:none;}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-grid{
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:60px;
+  align-items:start;
+}
+@media (max-width:860px){.about-grid{grid-template-columns:1fr;}}
+.about-copy p{color:var(--text-dim);font-size:16px;margin-bottom:18px;max-width:560px;}
+.about-copy strong{color:var(--text);font-weight:600;}
+.focus-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+.focus-chip{
+  font-family:var(--font-mono);font-size:12.5px;
+  padding:8px 14px;border-radius:999px;
+  border:1px solid var(--border);color:var(--cyan);
+  background:rgba(79,231,238,0.04);
+}
+.info-card{padding:26px;}
+.info-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border-soft);font-size:14px;}
+.info-row:last-child{border-bottom:none;}
+.info-row span:first-child{color:var(--text-faint);font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;}
+.info-row span:last-child{color:var(--text);text-align:right;max-width:60%;}
+
+/* ============================================================
+   SKILLS
+   ============================================================ */
+.skills-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+}
+.skill-card{padding:26px;}
+.skill-card .head{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.skill-icon{
+  width:38px;height:38px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(79,231,238,0.08);color:var(--cyan);
+  border:1px solid var(--border);
+}
+.skill-card h3{font-family:var(--font-display);font-size:17px;font-weight:600;}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;}
+.tag{
+  font-family:var(--font-mono);font-size:11.5px;
+  padding:6px 11px;border-radius:7px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border-soft);
+  color:var(--text-dim);
+  transition:border-color .2s,color .2s;
+}
+.skill-card:hover .tag{border-color:rgba(79,231,238,0.2);}
+
+/* ============================================================
+   PROJECTS
+   ============================================================ */
+.project-list{display:flex;flex-direction:column;gap:22px;}
+.project-card{padding:32px;display:block;cursor:pointer;}
+
+.project-tag-featured{
+  position:absolute;top:12px;left:12px;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;
+  background:rgba(79,231,238,0.12);color:var(--cyan);
+  padding:5px 10px;border-radius:6px;border:1px solid var(--border);
+  text-transform:uppercase;
+}
+.project-body h3{font-family:var(--font-display);font-size:23px;font-weight:600;margin-bottom:8px;}
+.project-body .p-sub{color:var(--cyan);font-family:var(--font-mono);font-size:12.5px;margin-bottom:14px;}
+.project-body p{color:var(--text-dim);font-size:15px;margin-bottom:16px;max-width:620px;}
+.project-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.project-links{display:flex;gap:20px;font-family:var(--font-mono);font-size:12.5px;}
+.project-links a{display:flex;align-items:center;gap:6px;color:var(--text-dim);transition:color .2s;}
+.project-links a:hover{color:var(--cyan);}
+.project-detail{
+  max-height:0;overflow:hidden;
+  transition:max-height .5s var(--ease), margin-top .5s var(--ease);
+}
+.project-card.expanded .project-detail{max-height:900px;margin-top:22px;}
+.project-detail-inner{border-top:1px solid var(--border-soft);padding-top:20px;display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+@media (max-width:640px){.project-detail-inner{grid-template-columns:1fr;}}
+.pd-block h4{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--violet);margin-bottom:8px;}
+.pd-block p, .pd-block li{color:var(--text-dim);font-size:14px;}
+.pd-block ul{padding-left:18px;}
+.expand-hint{font-family:var(--font-mono);font-size:11.5px;color:var(--text-faint);margin-top:14px;display:flex;align-items:center;gap:6px;}
+
+/* ============================================================
+   TIMELINE (experience / education)
+   ============================================================ */
+.timeline{position:relative;padding-left:34px;}
+.timeline::before{
+  content:'';position:absolute;left:6px;top:6px;bottom:6px;width:1px;
+  background:linear-gradient(var(--cyan),var(--violet) 60%, transparent);
+}
+.t-item{position:relative;padding-bottom:40px;}
+.t-item:last-child{padding-bottom:0;}
+.t-item::before{
+  content:'';position:absolute;left:-34px;top:4px;width:13px;height:13px;border-radius:50%;
+  background:var(--void);border:2px solid var(--cyan);box-shadow:0 0 12px rgba(79,231,238,0.5);
+}
+.t-item .t-date{font-family:var(--font-mono);color:var(--text-faint);font-size:12px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;}
+.t-item h3{font-family:var(--font-display);font-size:19px;font-weight:600;}
+.t-item .t-org{color:var(--cyan);font-size:14px;margin-bottom:10px;font-family:var(--font-mono);}
+.t-item p{color:var(--text-dim);font-size:14.5px;margin-bottom:10px;max-width:640px;}
+.t-item ul{padding-left:18px;color:var(--text-dim);font-size:14px;}
+.t-item li{margin-bottom:4px;}
+
+/* ============================================================
+   CERTIFICATIONS / ACHIEVEMENTS
+   ============================================================ */
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+.cert-card{padding:22px;display:flex;flex-direction:column;gap:10px;}
+.cert-card .badge{width:36px;height:36px;border-radius:8px;background:rgba(155,140,249,0.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--violet);}
+.cert-card h4{font-family:var(--font-display);font-size:15.5px;font-weight:600;}
+.cert-card .issuer{font-family:var(--font-mono);color:var(--text-faint);font-size:12px;}
+.cert-card .skills{color:var(--text-dim);font-size:13px;margin-top:2px;}
+.achieve-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:16px;}
+.achieve-card{padding:22px;display:flex;gap:16px;align-items:flex-start;}
+.achieve-card .num{font-family:var(--font-mono);color:var(--text-faint);font-size:12px;}
+.achieve-card h4{font-family:var(--font-display);font-size:15px;font-weight:600;margin-bottom:6px;}
+.achieve-card p{color:var(--text-dim);font-size:13.5px;}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-wrap{
+  border-radius:24px;
+  padding:64px 48px;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg, rgba(79,231,238,0.05), rgba(255,255,255,0));
+  border:1px solid var(--border);
+  text-align:center;
+}
+.contact-wrap h2{font-family:var(--font-display);font-weight:700;font-size:clamp(30px,5vw,52px);margin-bottom:16px;}
+.contact-wrap p{color:var(--text-dim);max-width:520px;margin:0 auto 36px;}
+.contact-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:44px;}
+.contact-links{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--text-dim);}
+.contact-links a{display:flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--border-soft);border-radius:10px;transition:all .2s;}
+.contact-links a:hover{color:var(--cyan);border-color:var(--cyan);background:rgba(79,231,238,0.05);}
+footer{text-align:center;padding:40px 20px;color:var(--text-faint);font-family:var(--font-mono);font-size:12px;}
+
+/* ============================================================
+   AI ASSISTANT
+   ============================================================ */
+#ai-launch{
+  position:fixed;
+  bottom:26px;right:26px;
+  width:64px;height:64px;
+  border-radius:50%;
+  background:rgba(10,15,24,0.85);
+  border:1px solid var(--border);
+  backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);
+  cursor:pointer;
+  z-index:200;
+  box-shadow:0 0 0 rgba(79,231,238,0);
+  transition:box-shadow .3s, transform .25s var(--ease), border-color .3s;
+}
+#ai-launch::after{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:1px solid rgba(79,231,238,0.35);
+  animation:pulsering 2.6s infinite;
+}
+@keyframes pulsering{0%{transform:scale(0.9);opacity:0.8;}100%{transform:scale(1.35);opacity:0;}}
+#ai-launch:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 8px 30px rgba(79,231,238,0.3);border-color:var(--cyan);}
+#ai-launch .unread{
+  position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;
+  background:var(--violet);box-shadow:0 0 8px var(--violet);border:2px solid var(--void);
+}
+
+#ai-panel{
+  position:fixed;
+  bottom:24px;right:24px;
+  width:400px;
+  max-width:calc(100vw - 32px);
+  height:min(640px, calc(100vh - 100px));
+  background:rgba(8,12,19,0.92);
+  border:1px solid var(--border);
+  border-radius:20px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 30px 80px -20px rgba(0,0,0,0.7), 0 0 60px -30px rgba(79,231,238,0.3);
+  z-index:201;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transform:translateY(24px) scale(0.96);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .35s var(--ease), opacity .3s;
+}
+#ai-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:auto;}
+@media (max-width:640px){
+  #ai-panel{
+    right:10px;left:10px;bottom:10px;
+    width:auto;height:min(88vh, 720px);
+  }
+}
+.ai-head{
+  padding:16px 18px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border-soft);
+  background:linear-gradient(180deg, rgba(79,231,238,0.06), transparent);
+}
+.ai-avatar{
+  width:38px;height:38px;border-radius:10px;
+  background:rgba(79,231,238,0.1);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;color:var(--cyan);
+  position:relative;
+}
+.ai-avatar .live-dot{position:absolute;bottom:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:#5be08a;border:2px solid #0a0f18;}
+.ai-head-text{flex:1;}
+.ai-head-text .t1{font-family:var(--font-display);font-weight:600;font-size:14.5px;}
+.ai-head-text .t2{font-family:var(--font-mono);font-size:11px;color:#5be08a;}
+.ai-close{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:6px;border-radius:8px;}
+.ai-close:hover{color:var(--text);background:rgba(255,255,255,0.05);}
+
+.ai-modes{display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--border-soft);}
+.mode-btn{
+  flex:1;font-family:var(--font-mono);font-size:11px;padding:7px 8px;border-radius:8px;
+  border:1px solid var(--border-soft);background:transparent;color:var(--text-faint);cursor:pointer;
+  transition:all .2s;text-align:center;
+}
+.mode-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(79,231,238,0.08);}
+
+.ai-messages{
+  flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:16px;
+  scrollbar-width:thin;
+}
+.msg{max-width:88%;font-size:14px;line-height:1.55;animation:msgIn .35s var(--ease);}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--cyan),#3ab6c9);color:#04141a;padding:11px 15px;border-radius:14px 14px 3px 14px;font-weight:500;}
+.msg.bot{align-self:flex-start;color:var(--text);}
+.msg.bot .bubble{background:rgba(255,255,255,0.03);border:1px solid var(--border-soft);padding:13px 15px;border-radius:3px 14px 14px 14px;}
+.msg.bot .bubble h4{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;color:var(--violet);margin:10px 0 4px;letter-spacing:.05em;}
+.msg.bot .bubble h4:first-child{margin-top:0;}
+.msg.bot .bubble ul{padding-left:18px;margin:4px 0;}
+.msg.bot .bubble li{margin-bottom:3px;color:var(--text-dim);}
+.msg.bot .bubble p{margin-bottom:6px;color:var(--text-dim);}
+.msg.bot .bubble p:last-child{margin-bottom:0;}
+.msg.bot .bubble strong{color:var(--text);}
+.msg-nav-btn{
+  margin-top:10px;display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-mono);font-size:12px;color:var(--cyan);
+  border:1px solid var(--border);padding:8px 13px;border-radius:9px;cursor:pointer;background:rgba(79,231,238,0.05);
+  transition:all .2s;
+}
+.msg-nav-btn:hover{background:rgba(79,231,238,0.12);border-color:var(--cyan);}
+.suggest-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.suggest-chip{
+  font-family:var(--font-mono);font-size:11.5px;color:var(--text-dim);
+  border:1px solid var(--border-soft);padding:8px 12px;border-radius:9px;cursor:pointer;background:rgba(255,255,255,0.02);
+  transition:all .2s;
+}
+.suggest-chip:hover{border-color:var(--cyan);color:var(--cyan);}
+.typing{display:flex;gap:4px;padding:14px 15px;align-self:flex-start;background:rgba(255,255,255,0.03);border:1px solid var(--border-soft);border-radius:3px 14px 14px 14px;}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--cyan);opacity:0.4;animation:typingDot 1.1s infinite;}
+.typing span:nth-child(2){animation-delay:.15s;}
+.typing span:nth-child(3){animation-delay:.3s;}
+@keyframes typingDot{0%,60%,100%{opacity:0.3;transform:translateY(0);}30%{opacity:1;transform:translateY(-3px);}}
+
+.ai-inputrow{
+  padding:14px;border-top:1px solid var(--border-soft);display:flex;gap:10px;align-items:center;
+}
+.ai-inputrow input{
+  flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border-soft);
+  border-radius:10px;padding:12px 14px;color:var(--text);font-family:var(--font-body);font-size:14px;
+}
+.ai-inputrow input::placeholder{color:var(--text-faint);}
+.ai-inputrow input:focus{border-color:var(--cyan);}
+.ai-send{
+  width:42px;height:42px;border-radius:10px;background:var(--cyan);border:none;color:#04141a;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:transform .2s;
+}
+.ai-send:hover{transform:scale(1.06);}
+.ai-hint{padding:0 14px 12px;font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);}
+
+@media (max-width:768px){
+  .hero-stats{gap:28px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     BACKGROUND LAYERS
+     ============================================================ -->
+<div class="vignette"></div>
+<div class="metal-sheen"></div>
+<div class="pcb-etch" id="pcbEtch"></div>
+<div class="grain"></div>
+<canvas id="circuit-layer"></canvas>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="page-shell">
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<header class="topnav" id="topnav">
+  <div class="logo">
+    <span class="logo-mark">CB</span>
+    <span>CHINTHAN<span style="color:var(--text-faint)">.BR</span></span>
+  </div>
+  <nav class="nav-links">
+    <a href="#about" data-nav>About</a>
+    <a href="#skills" data-nav>Skills</a>
+    <a href="#projects" data-nav>Projects</a>
+    <a href="#experience" data-nav>Applied Work</a>
+    <a href="#education" data-nav>Education</a>
+    <a href="#contact" data-nav>Contact</a>
+  </nav>
+  <div class="nav-cta">
+    <button class="btn-ghost-nav" id="navAskAi" data-hover>Ask My AI</button>
+    <button class="nav-toggle" id="mobileToggle" aria-label="Open menu">☰</button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" data-nav>About</a>
+  <a href="#skills" data-nav>Skills</a>
+  <a href="#projects" data-nav>Projects</a>
+  <a href="#experience" data-nav>Applied Work</a>
+  <a href="#education" data-nav>Education</a>
+  <a href="#achievements" data-nav>Achievements</a>
+  <a href="#contact" data-nav>Contact</a>
+</div>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero wrap" id="hero">
+  <div class="hero-tag"><span class="dot"></span> Open to internships &amp; roles in Embedded, Software &amp; Hardware</div>
+  <h1>Building where <span class="accent">circuits</span> meet <span class="accent">code.</span></h1>
+  <p class="role">Electronics &amp; Communication Engineering Student — Embedded Systems · Software · Hardware</p>
+  <p class="desc">B.E. ECE student working across embedded systems, software and hardware — comfortable in C, C++, Python, Java and Embedded C on the firmware side, and HTML/CSS/JavaScript on the web side. Actively looking for an internship or entry-level role.</p>
+  <div class="hero-actions">
+    <button class="btn btn-primary" data-hover onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Explore Portfolio →</button>
+    <button class="btn btn-outline" data-hover id="heroAskAi">✦ Ask My AI</button>
+  </div>
+  <div class="hero-stats reveal" id="heroStats">
+    <div class="stat"><b>5</b><span>Core Languages</span></div>
+    <div class="stat"><b>3</b><span>Focus Areas</span></div>
+    <div class="stat"><b>6</b><span>Semesters Completed</span></div>
+    <div class="stat"><b>2027</b><span>Expected Graduation</span></div>
+  </div>
+  <div class="scroll-hint"><span>SCROLL</span><div class="line"></div></div>
+</section>
+
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow reveal">01 · About</div>
+    <div class="about-grid reveal">
+      <div class="about-copy">
+        <h2 class="section-title" style="margin-bottom:24px;">A hardware mindset, applied to software problems.</h2>
+        <p>I'm <strong>Chinthan B R</strong>, a 7th-semester <strong>B.E. Electronics &amp; Communication Engineering</strong> student at KVG College of Engineering. I'm building skills across embedded systems, software, and hardware — from C/C++/Embedded C firmware work to HTML/CSS/JavaScript on the web side.</p>
+        <p>I'm actively looking for an internship or entry-level role spanning <strong>embedded systems, software development, and hardware engineering</strong>. Detailed project write-ups are on the way — this portfolio is growing as I add them.</p>
+        <div class="focus-list">
+          <span class="focus-chip">Embedded Systems</span>
+          <span class="focus-chip">Software Development</span>
+          <span class="focus-chip">Hardware Engineering</span>
+          <span class="focus-chip">Electronics</span>
+        </div>
+      </div>
+      <div class="card info-card" data-hover>
+        <div class="info-row"><span>Degree</span><span>B.E., Electronics &amp; Communication Engineering</span></div>
+        <div class="info-row"><span>Institute</span><span>KVG College of Engineering</span></div>
+        <div class="info-row"><span>Graduation</span><span>2027</span></div>
+        <div class="info-row"><span>Based in</span><span>Sullia, Mangaluru, Karnataka, India</span></div>
+        <div class="info-row"><span>Looking for</span><span>Embedded / Software / Hardware Internships &amp; Roles</span></div>
+        <div class="info-row"><span>Status</span><span style="color:#5be08a;">Open to opportunities</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SKILLS
+     ============================================================ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow reveal">02 · Skills</div>
+    <h2 class="section-title reveal">Full-stack, from silicon to server.</h2>
+    <p class="section-sub reveal">Tools and technologies I use to take an idea from a breadboard to a working, connected product.</p>
+    <div class="skills-grid reveal-stagger" id="skillsGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROJECTS
+     ============================================================ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow reveal">03 · Projects</div>
+    <h2 class="section-title reveal">Selected engineering projects.</h2>
+    <p class="section-sub reveal">Tap any project to expand the full technical breakdown — architecture, contribution, and challenges.</p>
+    <div class="project-list reveal-stagger" id="projectList"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EXPERIENCE
+     ============================================================ -->
+<section id="experience">
+  <div class="wrap">
+    <div class="eyebrow reveal">04 · Experience</div>
+    <h2 class="section-title reveal">Applied Work.</h2>
+    <p class="section-sub reveal">Industry-focused virtual experience programs and job simulations completed to build practical engineering, software, and problem-solving skills.</p>
+    <div class="timeline reveal" id="experienceTimeline"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CERTIFICATIONS
+     ============================================================ -->
+<section id="certifications">
+  <div class="wrap">
+    <div class="eyebrow reveal">05 · Certifications</div>
+    <h2 class="section-title reveal">Verified learning.</h2>
+    <p class="section-sub reveal">Structured coursework that backs up the practical project work.</p>
+    <div class="cert-grid reveal-stagger" id="certGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EDUCATION
+     ============================================================ -->
+<section id="education">
+  <div class="wrap">
+    <div class="eyebrow reveal">06 · Education</div>
+    <h2 class="section-title reveal">Academic background.</h2>
+    <div class="timeline reveal" id="educationTimeline"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ACHIEVEMENTS
+     ============================================================ -->
+<section id="achievements">
+  <div class="wrap">
+    <div class="eyebrow reveal">07 · Achievements</div>
+    <h2 class="section-title reveal">Competitions &amp; recognition.</h2>
+    <div class="achieve-list reveal-stagger" id="achieveList"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-wrap reveal">
+      <div class="eyebrow" style="justify-content:center;">08 · Contact</div>
+      <h2>Let's build something.</h2>
+      <p>Have a role, a project, or just a question about how something in this portfolio works? I'd like to hear from you — or ask my AI first.</p>
+      <div class="contact-actions">
+        <a class="btn btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=chinthubr4@gmail.com" target="_blank" rel="noopener" data-hover>Email Me</a>
+        <button class="btn btn-outline" id="contactAskAi" data-hover>✦ Ask My AI</button>
+      </div>
+      <div class="contact-links">
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=chinthubr4@gmail.com" target="_blank" rel="noopener" data-hover>✉ chinthubr4@gmail.com</a>
+        <a href="https://github.com/Chinthan3751" target="_blank" rel="noopener" data-hover>⌥ github.com/Chinthan3751</a>
+        <a href="https://www.linkedin.com/in/chinthan-b-r-b1a3a3338/" target="_blank" rel="noopener" data-hover>in linkedin.com/in/chinthan-b-r</a>
+        <a href="Resume.pdf" target="_blank" rel="noopener" data-hover>⇩ Resume (PDF)</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Chinthan B R — Built with a circuit board, a lot of coffee, and this AI assistant.</footer>
+
+</div><!-- /page-shell -->
+
+<!-- ============================================================
+     AI ASSISTANT
+     ============================================================ -->
+<button id="ai-launch" aria-label="Open AI portfolio assistant" data-hover>
+  <span class="unread" id="aiUnread"></span>
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M9 3.5 12 7l3-3.5"/><circle cx="9.5" cy="12.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="12.5" r="1.1" fill="currentColor" stroke="none"/><path d="M2 12h3M19 12h3"/></svg>
+</button>
+
+<div id="ai-panel" role="dialog" aria-label="AI portfolio assistant chat">
+  <div class="ai-head">
+    <div class="ai-avatar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M9 3.5 12 7l3-3.5"/><circle cx="9.5" cy="12.5" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="12.5" r="1" fill="currentColor" stroke="none"/></svg>
+      <span class="live-dot"></span>
+    </div>
+    <div class="ai-head-text">
+      <div class="t1">AI Profile Assistant</div>
+      <div class="t2">● Online — knows Chinthan's portfolio</div>
+    </div>
+    <button class="ai-close" id="aiClose" aria-label="Close chat">✕</button>
+  </div>
+  <div class="ai-modes">
+    <button class="mode-btn active" data-mode="standard">Standard</button>
+    <button class="mode-btn" data-mode="recruiter">Recruiter</button>
+    <button class="mode-btn" data-mode="technical">Technical</button>
+  </div>
+  <div class="ai-messages" id="aiMessages"></div>
+  <div class="ai-inputrow">
+    <input type="text" id="aiInput" placeholder="Ask about his projects, skills, experience…" autocomplete="off" />
+    <button class="ai-send" id="aiSend" aria-label="Send message">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+    </button>
+  </div>
+  <div class="ai-hint">Try /summary /skills /projects /experience — or just ask naturally</div>
+</div>
+
+<script>
+/* ================================================================
+   DATA LAYER  ——  equivalent to src/data/portfolio.ts
+   Single source of truth. The AI never states a personal fact that
+   isn't derived from this object.
+   ================================================================ */
+const portfolio = {
+  personal: {
+    name: "Chinthan B R",
+    title: "Electronics & Communication Engineering Student",
+    tagline: "Building at the intersection of software, embedded systems, electronics and intelligent technology.",
+    location: "Sullia, Mangaluru, Karnataka, India",
+    email: "chinthubr4@gmail.com",
+    pronoun: "he"
+  },
+  education: [
+    {
+      degree: "B.E., Electronics & Communication Engineering",
+      school: "KVG College of Engineering",
+      duration: "2023 — 2027 (Expected)",
+      details: "Currently in his 7th semester, expected to graduate in 2027.",
+      coursework: []
+    }
+  ],
+  skills: {
+    programming: ["C", "C++", "Python", "Java", "Embedded C"],
+    webDevelopment: ["HTML", "CSS", "JavaScript"],
+    embedded: ["ESP32", "Arduino", "Arduino IDE", "STM32 (basic)", "MATLAB/Simulink", "Xilinx Vivado", "RTOS fundamentals", "PCB prototyping"],
+    electronics: ["Analog & Digital Circuit Design", "Sensor Interfacing", "Motor Control", "Power Management", "KiCad"],
+    protocols: ["I2C", "SPI", "UART"],
+    tools: ["Git & GitHub", "Linux", "VS Code"]
+  },
+  projects: [
+    {
+      id: "pondbot",
+      name: "PondBot Autonomous Pond Cleaning Robot",
+      tagline: "Autonomous waste collection and monitoring robot for water surfaces",
+      description: "PondBot is an autonomous pond-cleaning robot designed to collect floating waste and debris from water surfaces. The system uses an ESP32 as the main controller, integrating motors, conveyor mechanisms, ultrasonic sensing, IMU, compass, and GPS for movement, obstacle detection, orientation, and monitoring. It also includes a web-based control interface for starting/stopping the robot, controlling the conveyor, and viewing real-time system status.",
+      technologies: ["ESP32", "Embedded C", "DC Motors", "Conveyor", "Ultrasonic", "IMU", "Compass", "GPS", "Web Interface"],
+      github: "#",
+      demo: "#",
+      featured: true,
+      problem: "Collect floating waste and debris from pond surfaces while providing control and system monitoring.",
+      architecture: "ESP32-based embedded controller integrating propulsion motors, conveyor mechanisms, ultrasonic sensing, IMU, compass, GPS, and a web-based control interface.",
+      contribution: "Developed the embedded control and monitoring concept around the ESP32, sensor integration, motor and conveyor control, and web-based robot operation.",
+      challenges: [
+        "Integrating multiple sensors and actuators with the ESP32 controller.",
+        "Combining movement, obstacle detection, orientation, GPS monitoring, and conveyor control.",
+        "Providing robot control and real-time status through a web interface."
+      ],
+      features: [
+        "Autonomous pond-surface waste collection.",
+        "Obstacle detection using ultrasonic sensing.",
+        "Orientation and movement monitoring using IMU, compass, and GPS.",
+        "Web-based start/stop, conveyor control, and system-status monitoring."
+      ],
+      outcome: "A multidisciplinary embedded robotics project combining sensing, motor control, automation, and a web-based monitoring interface."
+    },
+    {
+      id: "ekart",
+      name: "eKart",
+      tagline: "Modern responsive e-commerce web application",
+      description: "eKart is a modern e-commerce web application designed to provide users with a seamless online shopping experience. The project focuses on product discovery, category-based browsing, product information, and an intuitive user interface. It demonstrates practical frontend development skills and the ability to design a responsive web application around real-world e-commerce requirements.",
+      technologies: ["HTML", "CSS", "JavaScript", "Responsive UI", "Frontend Development"],
+      github: "#",
+      demo: "#",
+      featured: false,
+      problem: "Create an intuitive online shopping experience focused on product discovery, category browsing, and product information.",
+      architecture: "Responsive frontend web application organized around product discovery, category-based browsing, product information, and user interface components.",
+      contribution: "Worked on the frontend structure and user interface design for the e-commerce experience.",
+      challenges: [
+        "Designing an intuitive interface for product discovery and browsing.",
+        "Creating a responsive experience for different screen sizes.",
+        "Organizing product and category information clearly."
+      ],
+      features: [
+        "Product discovery and browsing.",
+        "Category-based navigation.",
+        "Product information presentation.",
+        "Responsive user interface."
+      ],
+      outcome: "A practical frontend e-commerce project demonstrating responsive web development and real-world UI design."
+    },
+    {
+      id: "edulinkx",
+      name: "EduLinkX",
+      tagline: "AI-powered education, placement, and career networking platform",
+      description: "EduLinkX is an AI-powered education, placement, and career networking platform designed to connect students with learning resources, career opportunities, and professional networks. The platform is designed around a modern web architecture with features such as user profiles, career-focused resources, and intelligent assistance to help students make better education and placement decisions.",
+      technologies: ["AI", "Web Development", "User Profiles", "Career Resources", "Intelligent Assistance"],
+      github: "#",
+      demo: "#",
+      featured: false,
+      problem: "Help students connect education resources, career opportunities, professional networks, and placement guidance in one platform.",
+      architecture: "Modern web platform centered on user profiles, career-focused resources, networking, and AI-powered intelligent assistance.",
+      contribution: "Designed the platform concept and feature structure around student profiles, education resources, career opportunities, and intelligent assistance.",
+      challenges: [
+        "Bringing education, placement, and career networking needs into one platform.",
+        "Designing useful user-profile and career-resource flows.",
+        "Integrating intelligent assistance into a student-focused web experience."
+      ],
+      features: [
+        "Student user profiles.",
+        "Education and career resources.",
+        "Placement-focused opportunities.",
+        "Professional networking features.",
+        "AI-powered intelligent assistance."
+      ],
+      outcome: "A student-focused platform concept combining web development, career networking, education resources, and AI assistance."
+    },
+    {
+      id: "street-light",
+      name: "Automatic Street Light System",
+      tagline: "Sensor-based automatic lighting and energy management",
+      description: "An automatic street lighting system that controls lights based on ambient conditions and movement. A light sensor detects changes in surrounding illumination while motion sensing can be used to optimize power consumption. The project demonstrates sensor interfacing, automation, and energy-efficient embedded control.",
+      technologies: ["Microcontroller", "Light Sensor", "Motion Sensor", "Embedded Control", "Automation"],
+      github: "#",
+      demo: "#",
+      featured: false,
+      problem: "Automatically control street lighting according to surrounding illumination and movement to improve energy efficiency.",
+      architecture: "Sensor-based embedded control system using ambient-light detection and motion sensing to determine lighting behavior.",
+      contribution: "Worked on the sensor interfacing and automatic control concept for managing the street lights based on environmental conditions and movement.",
+      challenges: [
+        "Interfacing sensors with the embedded controller.",
+        "Combining ambient-light and movement conditions for automatic control.",
+        "Balancing automatic operation with energy-saving requirements."
+      ],
+      features: [
+        "Ambient-light-based control.",
+        "Motion-based lighting optimization.",
+        "Automatic operation.",
+        "Energy-efficient embedded control."
+      ],
+      outcome: "An embedded automation project demonstrating sensor interfacing, automatic lighting control, and energy-conscious system design."
+    },
+    {
+      id: "pid-motor",
+      name: "PID-Based DC Motor Speed Controller",
+      tagline: "Closed-loop real-time DC motor speed control",
+      description: "A closed-loop DC motor speed control system that uses a microcontroller and feedback sensor to maintain the motor at a desired speed. A PID control algorithm continuously compares the target and measured speed and adjusts the PWM output accordingly. This project demonstrates control systems, embedded programming, feedback mechanisms, and real-time hardware control.",
+      technologies: ["PID Control", "DC Motor", "Microcontroller", "PWM", "Feedback Sensor", "Embedded Programming"],
+      github: "#",
+      demo: "#",
+      featured: false,
+      problem: "Maintain a DC motor at a desired speed despite changes detected by the feedback system.",
+      architecture: "Closed-loop controller that compares target speed with measured speed and adjusts motor PWM using a PID algorithm.",
+      contribution: "Implemented the embedded control concept involving speed feedback, PID computation, and PWM-based motor adjustment.",
+      challenges: [
+        "Implementing a feedback-based closed-loop control system.",
+        "Continuously comparing target and measured motor speed.",
+        "Adjusting PWM output through PID control for real-time operation."
+      ],
+      features: [
+        "Closed-loop speed control.",
+        "PID-based correction.",
+        "Speed feedback measurement.",
+        "PWM motor control."
+      ],
+      outcome: "A real-time embedded control project demonstrating feedback systems, PID algorithms, PWM, and DC motor control."
+    },
+    {
+      id: "uart-communication",
+      name: "UART-Based Embedded Communication System",
+      tagline: "Reliable serial communication between embedded devices",
+      description: "A microcontroller communication system developed to demonstrate reliable serial data exchange between embedded devices using UART. The firmware handles data transmission, reception, parsing, and device control while demonstrating practical use of serial communication protocols and interrupt-driven programming.",
+      technologies: ["UART", "Microcontroller", "Embedded C", "Serial Communication", "Interrupts", "Data Parsing"],
+      github: "#",
+      demo: "#",
+      featured: false,
+      problem: "Demonstrate reliable serial data exchange and device control between embedded systems using UART.",
+      architecture: "Microcontroller firmware handling UART transmission, reception, data parsing, and device-control operations with interrupt-driven programming.",
+      contribution: "Developed the firmware concept for serial transmission and reception, data parsing, and embedded device control.",
+      challenges: [
+        "Handling serial data transmission and reception reliably.",
+        "Parsing received data for device-control operations.",
+        "Using interrupt-driven programming for communication handling."
+      ],
+      features: [
+        "UART-based serial communication.",
+        "Data transmission and reception.",
+        "Received-data parsing.",
+        "Device control through serial commands.",
+        "Interrupt-driven communication handling."
+      ],
+      outcome: "An embedded communication project demonstrating UART, firmware development, data parsing, and interrupt-based programming."
+    }
+  ],
+  experience: [],
+  internships: [],
+  jobSimulations: [
+    {
+      name: "Deloitte Technology Job Simulation",
+      platform: "Deloitte Australia · Forage",
+      duration: "2–3 hours · Self-paced",
+      description: "Completed a technology-focused job simulation covering practical software development and client-oriented technology tasks. The experience included creating an algorithm to unify two different data models and combining code into a unified format using Python.",
+      skills: [
+        "Python Programming",
+        "Data Structures",
+        "Programming",
+        "Software Development",
+        "Formal Communication",
+        "Planning",
+        "Data Transformation",
+        "Problem Solving"
+      ]
+    },
+    {
+      name: "GE Aerospace – Explore Electrical Engineering",
+      platform: "GE Aerospace · Forage",
+      duration: "3–4 hours · Self-paced",
+      description: "Completed an electrical engineering job simulation as an Edison Engineer team member, working through aerospace electrical-system scenarios involving avionics, power distribution, navigation systems, design decisions, troubleshooting, and technical documentation.",
+      skills: [
+        "Electrical Engineering",
+        "Aviation Systems",
+        "Avionics Systems Analysis",
+        "Electrical Systems Design",
+        "Power Distribution",
+        "Navigation System Troubleshooting",
+        "Quality Assurance",
+        "Technical Documentation",
+        "Technical Writing",
+        "Critical Thinking",
+        "Problem Solving"
+      ]
+    },
+    {
+      name: "Siemens Mobility – Operations Industrial Engineer",
+      platform: "Siemens Mobility · Forage",
+      duration: "2–3 hours · Self-paced",
+      description: "Completed an operations industrial engineering simulation based on Siemens Mobility's Project Velocity and the Aurora Express high-speed train. Analyzed time-study data, identified manufacturing bottlenecks, and developed assembly-line layout improvement proposals to improve efficiency and productivity.",
+      skills: [
+        "Data Analysis",
+        "Time Study Analysis",
+        "Bottleneck Identification",
+        "Process Optimization",
+        "Workflow Analysis",
+        "Lean Methodology",
+        "Quality Control",
+        "Layout Design",
+        "Strategic Planning",
+        "Systems Thinking"
+      ]
+    },
+    {
+      name: "Blackbird – Software Engineering",
+      platform: "Blackbird · Forage",
+      duration: "6–7 hours · Self-paced",
+      description: "Completed a software engineering virtual experience focused on startup engineering practices, including collaborative development, GitHub workflows, React development, cloud infrastructure, system architecture, testing, and product-oriented problem solving.",
+      skills: [
+        "React Development",
+        "JavaScript Programming",
+        "Git & GitHub",
+        "GitHub CLI",
+        "Version Control",
+        "Branching & Pull Requests",
+        "AWS / Cloud Computing",
+        "System Architecture",
+        "Unit Testing",
+        "Agile Methodology",
+        "Product Analytics",
+        "Collaboration"
+      ]
+    },
+  ],
+  certifications: [
+    {
+      name: "Embedded Systems Certificate",
+      org: "Simplilearn SkillUp",
+      date: "Certificate",
+      skills: ["Embedded Systems", "Microcontrollers", "Embedded Programming"]
+    },
+    {
+      name: "C Programming",
+      org: "Infosys Springboard",
+      date: "Certificate",
+      skills: ["C Programming", "Programming Fundamentals", "Problem Solving"]
+    },
+    {
+      name: "C++ Programming",
+      org: "Infosys Springboard",
+      date: "Certificate",
+      skills: ["C++", "Object-Oriented Programming", "Programming Fundamentals"]
+    },
+    {
+      name: "Electronics Fundamentals",
+      org: "SGP Academy",
+      date: "Certificate",
+      skills: ["Electronics", "Electronic Components", "Circuit Fundamentals"]
+    },
+    {
+      name: "PCB Design Certificate",
+      org: "Simplilearn SkillUp",
+      date: "Certificate",
+      skills: ["PCB Design", "Circuit Design", "PCB Fundamentals"]
+    },
+    {
+      name: "VLSI Certification",
+      org: "Sanfoundry",
+      date: "Certificate",
+      skills: ["VLSI", "Digital Electronics", "VLSI Fundamentals"]
+    },
+    {
+      name: "Artificial Intelligence Fundamentals",
+      org: "IBM SkillsBuild",
+      date: "Certificate",
+      skills: ["Artificial Intelligence", "AI Fundamentals", "Machine Learning Concepts"]
+    }
+  ],
+  achievements: [
+    {
+      title: "VTU Regional Level Product Launch Program",
+      detail: "Participated in the VTU Regional Level Product Launch Program, gaining experience in presenting and communicating a product concept in a competitive setting."
+    }
+  ],
+  careerGoals: {
+    targetRoles: ["Embedded Systems Engineer", "Software Engineer", "Hardware Engineer"],
+    domains: ["Embedded Systems", "Software Development", "Hardware Engineering"],
+    shortTerm: "Looking for an internship or entry-level role in embedded systems, software, or hardware engineering.",
+    longTerm: "Grow into an engineer who can work confidently across both hardware and software.",
+    improving: []
+  },
+  interests: [],
+  contact: {
+    email: "chinthubr4@gmail.com",
+    github: "https://github.com/Chinthan3751",
+    linkedin: "https://www.linkedin.com/in/chinthan-b-r-b1a3a3338/"
+  }
+};
+
+/* ================================================================
+   RENDER LAYER  ——  populates sections from portfolio data
+   ================================================================ */
+function el(tag, cls, html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html!==undefined)e.innerHTML=html; return e; }
+
+// SKILLS
+(function renderSkills(){
+  const groups = [
+    { title:"Programming", icon:"⌘", items: portfolio.skills.programming },
+    { title:"Web Development", icon:"◱", items: portfolio.skills.webDevelopment },
+    { title:"Embedded Systems", icon:"◧", items: portfolio.skills.embedded },
+    { title:"Electronics", icon:"⏚", items: portfolio.skills.electronics },
+    { title:"Protocols", icon:"↯", items: portfolio.skills.protocols },
+    { title:"Tools", icon:"⚙", items: portfolio.skills.tools }
+  ];
+  const grid = document.getElementById('skillsGrid');
+  groups.forEach((g,i)=>{
+    const card = el('div','card skill-card reveal');
+    card.style.setProperty('--i', i);
+    card.dataset.hover = "";
+    card.setAttribute('data-hover','');
+    card.innerHTML = `
+      <div class="head"><div class="skill-icon">${g.icon}</div><h3>${g.title}</h3></div>
+      <div class="tag-row">${g.items.map(s=>`<span class="tag">${s}</span>`).join('')}</div>
+    `;
+    grid.appendChild(card);
+  });
+})();
+
+// PROJECTS
+(function renderProjects(){
+  const list = document.getElementById('projectList');
+  if(!portfolio.projects.length){
+    const ph = el('div','card empty-state reveal');
+    ph.innerHTML = `<p>Project write-ups are being added soon. In the meantime, ask the AI assistant about Chinthan's skills or education.</p>`;
+    list.appendChild(ph);
+    return;
+  }
+  portfolio.projects.forEach((p,i)=>{
+    const card = el('div','card project-card reveal');
+    card.style.setProperty('--i', i);
+    card.dataset.projectId = p.id;
+    card.innerHTML = `
+      <div class="project-body">
+        <h3>${p.name}</h3>
+        <div class="p-sub">${p.tagline}</div>
+        <p>${p.description}</p>
+        <div class="project-meta">${p.technologies.slice(0,6).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="project-links">
+          ${p.demo && p.demo!=='#' ? `<a href="${p.demo}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Demo</a>` : ''}
+        </div>
+        <div class="expand-hint">▾ Tap to expand full technical breakdown</div>
+        <div class="project-detail">
+          <div class="project-detail-inner">
+            <div class="pd-block"><h4>Problem</h4><p>${p.problem}</p></div>
+            <div class="pd-block"><h4>Architecture</h4><p>${p.architecture}</p></div>
+            <div class="pd-block"><h4>My Contribution</h4><p>${p.contribution}</p></div>
+            <div class="pd-block"><h4>Challenges</h4><ul>${p.challenges.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+            <div class="pd-block"><h4>Features</h4><ul>${p.features.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+            <div class="pd-block"><h4>Outcome</h4><p>${p.outcome}</p></div>
+          </div>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', ()=>{
+      card.classList.toggle('expanded');
+      pulseTowards(card);
+    });
+    list.appendChild(card);
+  });
+})();
+
+// EXPERIENCE
+(function renderExperience(){
+  const t = document.getElementById('experienceTimeline');
+  const items = [...portfolio.experience.map(e=>({...e,type:'work'})), ...portfolio.jobSimulations.map(s=>({role:s.name,org:s.platform,duration:s.duration || 'Job Simulation',description:s.description,points:s.skills,type:'sim'}))];
+  if(!items.length){
+    t.classList.add('empty');
+    const ph = el('div','card empty-state');
+    ph.innerHTML = `<p>Applied-work details are being added soon.</p>`;
+    t.appendChild(ph);
+    return;
+  }
+  items.forEach(it=>{
+    const d = el('div','t-item');
+    d.innerHTML = `
+      <div class="t-date">${it.duration || 'Job Simulation'}</div>
+      <h3>${it.role}</h3>
+      <div class="t-org">${it.org}</div>
+      <p>${it.description}</p>
+      <ul>${(it.points||[]).map(p=>`<li>${p}</li>`).join('')}</ul>
+    `;
+    t.appendChild(d);
+  });
+})();
+
+// CERTIFICATIONS
+(function renderCerts(){
+  const grid = document.getElementById('certGrid');
+  if(!portfolio.certifications.length){
+    const ph = el('div','card empty-state reveal');
+    ph.innerHTML = `<p>Certifications are being added soon.</p>`;
+    grid.appendChild(ph);
+    return;
+  }
+  portfolio.certifications.forEach((c,i)=>{
+    const card = el('div','card cert-card reveal');
+    card.style.setProperty('--i', i);
+    card.setAttribute('data-hover','');
+    card.innerHTML = `
+      <div class="badge">✓</div>
+      <h4>${c.name}</h4>
+      <div class="issuer">${c.org} · ${c.date}</div>
+      <div class="skills">${c.skills.join(', ')}</div>
+    `;
+    grid.appendChild(card);
+  });
+})();
+
+// EDUCATION
+(function renderEducation(){
+  const t = document.getElementById('educationTimeline');
+  portfolio.education.forEach(e=>{
+    const d = el('div','t-item');
+    d.innerHTML = `
+      <div class="t-date">${e.duration}</div>
+      <h3>${e.degree}</h3>
+      <div class="t-org">${e.school}</div>
+      <p>${e.details}</p>
+    `;
+    t.appendChild(d);
+  });
+})();
+
+// ACHIEVEMENTS
+(function renderAchievements(){
+  const l = document.getElementById('achieveList');
+  if(!portfolio.achievements.length){
+    const ph = el('div','card empty-state reveal');
+    ph.innerHTML = `<p>Achievements and competitions are being added soon.</p>`;
+    l.appendChild(ph);
+    return;
+  }
+  portfolio.achievements.forEach((a,i)=>{
+    const card = el('div','card achieve-card reveal');
+    card.style.setProperty('--i', i);
+    card.setAttribute('data-hover','');
+    card.innerHTML = `<div class="num">0${i+1}</div><div><h4>${a.title}</h4><p>${a.detail}</p></div>`;
+    l.appendChild(card);
+  });
+})();
+
+/* ================================================================
+   AI ENGINE  ——  equivalent to src/ai/knowledge.ts + assistant.ts
+   Purely local, deterministic intent matching against `portfolio`.
+   No external calls, no fabricated facts: every answer is either
+   built from portfolio data, a stated inference, or a clear
+   "I don't have that information" fallback.
+   ================================================================ */
+const AI = (function(){
+  const name = portfolio.personal.name;
+  const firstName = name.split(' ')[0];
+  let mode = 'standard'; // standard | recruiter | technical
+  let lastTopic = null; // last project id or category discussed
+  let history = [];
+
+  function findProject(text){
+    const t = text.toLowerCase();
+    return portfolio.projects.find(p => t.includes(p.name.toLowerCase()) || t.includes(p.id));
+  }
+
+  function has(text, words){ return words.some(w => text.includes(w)); }
+
+  function projectOverview(p, m){
+    if(m === 'recruiter'){
+      return `<p><strong>${p.name}</strong> — ${p.tagline}. ${p.outcome}</p>`;
+    }
+    if(m === 'technical'){
+      return `
+        <h4>Overview</h4><p>${p.description}</p>
+        <h4>Architecture</h4><p>${p.architecture}</p>
+        <h4>Hardware</h4><p>${p.hardware}</p>
+        <h4>Software</h4><p>${p.software}</p>
+      `;
+    }
+    return `<p><strong>${p.name}</strong> — ${p.tagline}.</p><p>${p.description}</p>`;
+  }
+
+  function projectSlot(p, text){
+    // multi-part aware: return whichever slots were asked about, combined
+    let out = '';
+    if(has(text,['technolog','tech stack','stack','tools used','what did he use','hardware and software'])){
+      out += `<h4>Technologies</h4><p>${p.technologies.join(', ')}</p>`;
+    }
+    if(has(text,['role','contribut','personally','build','built','work on','did he do'])){
+      out += `<h4>His Contribution</h4><p>${p.contribution}</p>`;
+    }
+    if(has(text,['problem','solve','why','purpose','motivation'])){
+      out += `<h4>Problem it Solves</h4><p>${p.problem}</p>`;
+    }
+    if(has(text,['challeng','difficult','hard part','issue'])){
+      out += `<h4>Challenges</h4><ul>${p.challenges.map(c=>`<li>${c}</li>`).join('')}</ul>`;
+    }
+    if(has(text,['architect','how does it work','how it works','design'])){
+      out += `<h4>Architecture</h4><p>${p.architecture}</p>`;
+    }
+    if(has(text,['feature','functionalit','capable','can it do'])){
+      out += `<h4>Features</h4><ul>${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>`;
+    }
+    if(has(text,['outcome','result','achiev','success'])){
+      out += `<h4>Outcome</h4><p>${p.outcome}</p>`;
+    }
+    if(has(text,['sensor'])){
+      const sensorTech = p.technologies.filter(t => /sensor|ultrasonic|ir |hc-sr|acs712/i.test(t));
+      out += `<h4>Sensors</h4><p>${sensorTech.length ? sensorTech.join(', ') : "Sensor details for this specific part aren't broken out separately in my data — see Technologies above."}</p>`;
+    }
+    return out;
+  }
+
+  function summary(m){
+    const e = portfolio.education[0];
+    const roles = portfolio.careerGoals.targetRoles.join(', ');
+    const hasContent = portfolio.projects.length || portfolio.experience.length || portfolio.certifications.length;
+    if(m === 'recruiter'){
+      let out = `<p><strong>${name}</strong> is a ${portfolio.personal.title}${e ? `, currently in his 7th semester at ${e.school}, expected to graduate in 2027` : ''}. He's targeting <strong>${roles}</strong> roles, with skills spanning ${portfolio.skills.programming.join(', ')} on the software side and ${portfolio.skills.embedded.slice(0,4).join(', ')} on the embedded/hardware side.</p>`;
+      if(!hasContent) out += `<p>Project, experience, and certification write-ups are still being added to this portfolio.</p>`;
+      return out + navBtn('skills');
+    }
+    if(m === 'technical'){
+      let out = `<p><strong>${name}</strong>'s current stack:</p>
+      <h4>Programming</h4><p>${portfolio.skills.programming.join(', ')}</p>
+      <h4>Embedded / Hardware Tools</h4><p>${portfolio.skills.embedded.join(', ')}</p>
+      <h4>Web</h4><p>${portfolio.skills.webDevelopment.join(', ')}</p>
+      <h4>Electronics</h4><p>${portfolio.skills.electronics.join(', ')}</p>`;
+      if(!hasContent) out += `<p>Detailed project and experience breakdowns aren't in my knowledge base yet — check back soon.</p>`;
+      return out + navBtn('skills');
+    }
+    let out = `<p>${name} is a ${portfolio.personal.title.toLowerCase()}${e ? `, currently in his 7th semester at ${e.school}, expected to graduate in 2027` : ''}. ${portfolio.careerGoals.shortTerm}</p>`;
+    out += `<p>His core skills span ${portfolio.skills.programming.slice(0,4).join(', ')} on the programming side, plus ${portfolio.skills.embedded.slice(0,3).join(', ')} on the embedded/hardware side.</p>`;
+    if(!hasContent) out += `<p>Project and experience details are still being added — ask about his skills or education in the meantime.</p>`;
+    return out + navBtn('about');
+  }
+
+  // Ordered intent rules — first sufficiently-scoring match wins.
+  const intents = [
+    {
+      id:'greeting',
+      test: t => /^(hi|hello|hey|yo|sup)\b/.test(t.trim()),
+      run: () => `<p>Hey! I'm the AI assistant for ${name}. Ask me about his education, skills, projects, experience, certifications, or career interests — or tap a suggestion below.</p>` + suggestChips(['Tell me about him','What are his skills?','What is he looking for?','Tell me about his education'])
+    },
+    {
+      id:'who',
+      test: t => has(t,['who is he','who are you','tell me about him','about him','introduce him','who is chinthan']),
+      run: () => summary(mode)
+    },
+    {
+      id:'summary_cmd',
+      test: t => t.startsWith('/summary') || has(t,['30-second','30 second','one-minute','quick summary','complete profile','overview of him','give me a summary']),
+      run: () => summary(mode)
+    },
+    {
+      id:'education',
+      test: t => t.startsWith('/education') || has(t,['study','studying','college','university','institute','degree','branch','graduat','semester','coursework','education']),
+      run: () => {
+        const e = portfolio.education[0];
+        return `<h4>Education</h4><p><strong>${e.degree}</strong> at ${e.school} (${e.duration}).</p><p>${e.details}</p>` + suggestChips(['What are his skills?','What roles is he looking for?']) + navBtn('education');
+      }
+    },
+    {
+      id:'skills',
+      test: t => t.startsWith('/skills') || has(t,['skill','programming language','coding language','languages does he know','know c++','know python','know java','web technolog','embedded technolog']),
+      run: (t) => {
+        if(has(t,['c++'])) return `<p>Yes — <strong>C++</strong> is one of his core programming languages.</p>` + navBtn('skills');
+        if(has(t,['python'])) return `<p>Yes — <strong>Python</strong> is one of his core programming languages.</p>` + navBtn('skills');
+        if(has(t,['java']) && !has(t,['javascript'])) return `<p>Yes — <strong>Java</strong> is one of his core programming languages.</p>` + navBtn('skills');
+        let out = `<h4>Programming</h4><p>${portfolio.skills.programming.join(', ')}</p>`;
+        out += `<h4>Web Development</h4><p>${portfolio.skills.webDevelopment.join(', ')}</p>`;
+        out += `<h4>Embedded Systems</h4><p>${portfolio.skills.embedded.join(', ')}</p>`;
+        out += `<h4>Electronics</h4><p>${portfolio.skills.electronics.join(', ')}</p>`;
+        lastTopic = 'skills';
+        return out + navBtn('skills');
+      }
+    },
+    {
+      id:'strongest_skill',
+      test: t => lastTopic === 'skills' && has(t,['strongest','best at','most confident']),
+      run: () => `<p>My knowledge base doesn't have a stated ranking of his strongest skill — that's not something I'd want to guess at. You could ask him directly, or I can list everything in his skill set.</p>` + navBtn('skills')
+    },
+    {
+      id:'projects_all',
+      test: t => t.startsWith('/projects') || has(t,['project','portfolio work','things he built','things he has built']) && !findProject(t),
+      run: () => {
+        if(!portfolio.projects.length){
+          return `<p>He hasn't added project write-ups to this portfolio yet — check back soon. In the meantime, I can tell you about his skills, education, or the roles he's targeting.</p>` + suggestChips(['What are his skills?','What roles is he looking for?']);
+        }
+        lastTopic = 'projects';
+        let out = `<p>He's built ${portfolio.projects.length} hands-on project${portfolio.projects.length>1?'s':''}:</p><ul>` +
+          portfolio.projects.map(p=>`<li><strong>${p.name}</strong> — ${p.tagline}</li>`).join('') + '</ul>';
+        return out + navBtn('projects');
+      }
+    },
+    {
+      id:'project_specific',
+      test: t => !!findProject(t),
+      run: (t) => {
+        const p = findProject(t);
+        lastTopic = p.id;
+        const slots = projectSlot(p, t);
+        const out = slots ? (projectOverview(p,'standard').split('<p>')[0] + slots) : projectOverview(p, mode);
+        return out + navBtn('projects');
+      }
+    },
+    {
+      id:'followup_project',
+      test: t => !!portfolio.projects.find(p=>p.id===lastTopic) && has(t,['sensor','role','challeng','technolog','architect','feature','outcome','contribut']),
+      run: (t) => {
+        const p = portfolio.projects.find(x=>x.id===lastTopic);
+        const slots = projectSlot(p, t);
+        return slots || `<p>Could you be a bit more specific about what you'd like to know regarding ${p.name}?</p>`;
+      }
+    },
+    {
+      id:'biggest_project',
+      test: t => has(t,['biggest project','main project','flagship','strongest project','most complex']),
+      run: () => {
+        if(!portfolio.projects.length){
+          return `<p>He hasn't added project write-ups to this portfolio yet — check back soon, or ask about his skills or education instead.</p>` + suggestChips(['What are his skills?','Tell me about his education']);
+        }
+        const p = portfolio.projects.find(x=>x.featured) || portfolio.projects[0];
+        lastTopic = p.id;
+        return `<p>His flagship project is <strong>${p.name}</strong> — ${p.tagline}.</p>` + navBtn('projects');
+      }
+    },
+    {
+      id:'experience',
+      test: t => t.startsWith('/experience') || has(t,['experience','internship','job simulation','worked at','work experience','intern']),
+      run: () => {
+        if(!portfolio.experience.length && !portfolio.jobSimulations.length){
+          return `<p>He hasn't added internship or work-experience details to this portfolio yet — check back soon, or ask about his skills or education in the meantime.</p>` + suggestChips(['What are his skills?','What roles is he looking for?']);
+        }
+        let out = '';
+        if(portfolio.experience.length){
+          out += `<h4>Experience</h4>`;
+          portfolio.experience.forEach(e=>{
+            out += `<p><strong>${e.role}</strong>, ${e.org} (${e.duration}). ${e.description}</p><ul>${e.points.map(p=>`<li>${p}</li>`).join('')}</ul>`;
+          });
+        }
+        if(portfolio.jobSimulations.length){
+          out += `<h4>Job Simulations</h4>`;
+          portfolio.jobSimulations.forEach(s=>{ out += `<p><strong>${s.name}</strong> (${s.platform}). ${s.description}</p>`; });
+        }
+        return out + navBtn('experience');
+      }
+    },
+    {
+      id:'certifications',
+      test: t => t.startsWith('/certifications') || has(t,['certificat','certified','course completed']),
+      run: (t) => {
+        if(!portfolio.certifications.length){
+          return `<p>He hasn't added certification details to this portfolio yet — check back soon.</p>` + suggestChips(['What are his skills?']);
+        }
+        if(has(t,['web development','web dev'])){
+          const c = portfolio.certifications.find(c=>/web development/i.test(c.name));
+          return c ? `<p>Most relevant to web development: <strong>${c.name}</strong> (${c.org}, ${c.date}) — covering ${c.skills.join(', ')}.</p>` + navBtn('certifications') : `<p>I don't have a certification specifically tagged for that.</p>`;
+        }
+        let out = `<h4>Certifications</h4><ul>` + portfolio.certifications.map(c=>`<li><strong>${c.name}</strong> — ${c.org}, ${c.date}</li>`).join('') + `</ul>`;
+        return out + navBtn('certifications');
+      }
+    },
+    {
+      id:'achievements',
+      test: t => t.startsWith('/achievements') || has(t,['achievement','award','hackathon','competition','workshop']),
+      run: () => {
+        if(!portfolio.achievements.length){
+          return `<p>He hasn't added achievement details to this portfolio yet — check back soon.</p>` + suggestChips(['What are his skills?']);
+        }
+        let out = `<ul>` + portfolio.achievements.map(a=>`<li><strong>${a.title}</strong> — ${a.detail}</li>`).join('') + `</ul>`;
+        return out + navBtn('achievements');
+      }
+    },
+    {
+      id:'career',
+      test: t => has(t,['career','job is he looking','role is he looking','type of job','interested in software','interested in embedded','interested in hardware','suitable for','type of compan']),
+      run: (t) => {
+        if(has(t,['embedded'])) return `<p>Yes — embedded systems is one of the three fields he's targeting, backed by skills like ${portfolio.skills.embedded.slice(0,4).join(', ')}.</p>` + navBtn('skills');
+        if(has(t,['software'])) return `<p>Yes — software is one of his three target fields, backed by ${portfolio.skills.programming.join(', ')} and ${portfolio.skills.webDevelopment.join(', ')}.</p>` + navBtn('skills');
+        if(has(t,['hardware'])) return `<p>Yes — hardware is explicitly one of his target fields too, alongside tools like ${portfolio.skills.electronics.slice(0,3).join(', ')}.</p>` + navBtn('skills');
+        return `<p>He's targeting <strong>${portfolio.careerGoals.targetRoles.join(', ')}</strong> roles, particularly across ${portfolio.careerGoals.domains.join(', ')}. ${portfolio.careerGoals.shortTerm}</p>`;
+      }
+    },
+    {
+      id:'why',
+      test: t => t.trim().toLowerCase().startsWith('why'),
+      run: () => `<p>I can reason about "why" questions once there's supporting project or experience detail in my knowledge base — that content is still being added for ${firstName}. In the meantime, try asking about his skills, education, or the roles he's targeting.</p>` + suggestChips(['What are his skills?','What roles is he looking for?'])
+    },
+    {
+      id:'recruiter_why_hire',
+      test: t => has(t,['why should we','why hire','why interview','strongest technical area','what makes him different','what makes his profile']),
+      run: () => {
+        const roles = portfolio.careerGoals.targetRoles.join(', ');
+        let out = `<p>He brings a combined skill set across <strong>embedded systems, software, and hardware</strong> — ${portfolio.skills.programming.join(', ')} on the programming side, plus ${portfolio.skills.embedded.slice(0,4).join(', ')} on the embedded/hardware side. That range is a good fit for ${roles} roles.</p>`;
+        if(!portfolio.projects.length) out += `<p>Project write-ups that demonstrate this in practice are being added to the portfolio soon.</p>`;
+        return out + navBtn('skills');
+      }
+    },
+    {
+      id:'contact',
+      test: t => t.startsWith('/contact') || has(t,['contact','email','github','linkedin','reach him','get in touch']),
+      run: () => `<p>You can reach him at <strong>${portfolio.contact.email}</strong>, or find him on <a href="${portfolio.contact.github}" target="_blank" rel="noopener" style="color:var(--cyan)">GitHub</a> and <a href="${portfolio.contact.linkedin}" target="_blank" rel="noopener" style="color:var(--cyan)">LinkedIn</a>.</p>` + navBtn('contact')
+    },
+    {
+      id:'resume',
+      test: t => t.startsWith('/resume') || has(t,['resume','cv']),
+      run: () => `<p>His resume covers the same information available here. His resume is available as a PDF from the Contact section. You can also ask me about his education, skills, projects, or career goals.</p>` + navBtn('contact')
+    },
+    {
+      id:'interview_mode',
+      test: t => has(t,['interview question','ask me interview','mock interview','practice question']),
+      run: () => `<p>Here are a few general questions based on his current skill areas (I can generate project-specific ones once he adds project write-ups):</p><ul>
+        <li>"Walk me through the difference between polling and interrupt-driven I/O on a microcontroller."</li>
+        <li>"How would you debug an I2C sensor that isn't responding?"</li>
+        <li>"What's a situation where you'd choose C over C++ for embedded firmware?"</li>
+        <li>"How comfortable are you moving between hardware-level debugging and web-facing software?"</li>
+      </ul>`
+    },
+    {
+      id:'compare',
+      test: t => has(t,['which project','which certification','best demonstrat']),
+      run: () => {
+        if(!portfolio.projects.length){
+          return `<p>He hasn't added project details yet, so I can't compare across projects — ask about his skills in the meantime.</p>` + suggestChips(['What are his skills?']);
+        }
+        const p = portfolio.projects.find(x=>x.featured) || portfolio.projects[0];
+        return `<p><strong>${p.name}</strong> is currently the strongest example in his portfolio for that — ${p.tagline}.</p>` + navBtn('projects');
+      }
+    },
+  ];
+
+  function suggestChips(list){
+    return `<div class="suggest-row">` + list.map(q=>`<span class="suggest-chip" data-ask="${q.replace(/"/g,'&quot;')}">${q}</span>`).join('') + `</div>`;
+  }
+  function navBtn(section){
+    const labelMap = {about:'About', skills:'Skills', projects:'Projects', experience:'Experience', certifications:'Certifications', education:'Education', achievements:'Achievements', contact:'Contact'};
+    return `<button class="msg-nav-btn" data-nav-target="${section}">Explore ${labelMap[section]} →</button>`;
+  }
+
+  function respond(raw){
+    const t = raw.toLowerCase().trim();
+    for(const intent of intents){
+      try{
+        if(intent.test(t)) return intent.run(t);
+      }catch(e){ /* skip faulty rule, keep going */ }
+    }
+    return `<p>I don't have that information in my portfolio data yet. I can tell you about ${firstName}'s education, skills, or the roles he's targeting — try asking about one of those.</p>` + suggestChips(['Tell me about him','What are his skills?','Tell me about his education']);
+  }
+
+  function setMode(m){ mode = m; }
+  function getMode(){ return mode; }
+
+  return { respond, setMode, getMode };
+})();
+
+/* ================================================================
+   AI CHAT UI
+   ================================================================ */
+const aiPanel = document.getElementById('ai-panel');
+const aiLaunch = document.getElementById('ai-launch');
+const aiMessages = document.getElementById('aiMessages');
+const aiInput = document.getElementById('aiInput');
+const aiUnread = document.getElementById('aiUnread');
+let aiOpened = false;
+
+function openAi(){
+  aiPanel.classList.add('open');
+  aiUnread.style.display = 'none';
+  activateCircuitBurst(window.innerWidth - 80, window.innerHeight - 80);
+  if(!aiOpened){
+    aiOpened = true;
+    setTimeout(()=>{
+      addBotMessage(`Hi! I'm the AI assistant for <strong>${portfolio.personal.name}</strong>. Ask me anything about his education, skills, projects, experience, certifications, or career interests.` +
+        `<div class="suggest-row">
+          <span class="suggest-chip" data-ask="Tell me about him">Tell me about him</span>
+          <span class="suggest-chip" data-ask="What are his skills?">What are his skills?</span>
+          <span class="suggest-chip" data-ask="Tell me about his education">Tell me about his education</span>
+          <span class="suggest-chip" data-ask="What roles is he looking for?">What roles is he looking for?</span>
+        </div>`);
+    }, 250);
+  }
+  aiInput.focus();
+}
+function closeAi(){ aiPanel.classList.remove('open'); }
+
+aiLaunch.addEventListener('click', openAi);
+document.getElementById('aiClose').addEventListener('click', closeAi);
+document.getElementById('heroAskAi').addEventListener('click', openAi);
+document.getElementById('navAskAi').addEventListener('click', openAi);
+document.getElementById('contactAskAi').addEventListener('click', openAi);
+
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    AI.setMode(btn.dataset.mode);
+    addBotMessage(`Switched to <strong>${btn.dataset.mode}</strong> mode. ${btn.dataset.mode === 'recruiter' ? "I'll keep answers concise and hire-focused." : btn.dataset.mode === 'technical' ? "I'll give deeper technical detail." : "Back to balanced, everyday answers."}`);
+  });
+});
+
+function addUserMessage(text){
+  const m = el('div','msg user');
+  m.textContent = text;
+  aiMessages.appendChild(m);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+}
+function addBotMessage(html){
+  const m = el('div','msg bot');
+  m.innerHTML = `<div class="bubble">${html}</div>`;
+  aiMessages.appendChild(m);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+  pulseTowards(aiPanel);
+}
+function showTyping(){
+  const t = el('div','typing');
+  t.id = 'typingIndicator';
+  t.innerHTML = '<span></span><span></span><span></span>';
+  aiMessages.appendChild(t);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+}
+function hideTyping(){
+  const t = document.getElementById('typingIndicator');
+  if(t) t.remove();
+}
+
+function handleAsk(text){
+  if(!text.trim()) return;
+  addUserMessage(text);
+  aiInput.value = '';
+  showTyping();
+  const delay = 420 + Math.random()*380;
+  setTimeout(()=>{
+    hideTyping();
+    const html = AI.respond(text);
+    addBotMessage(html);
+  }, delay);
+}
+
+document.getElementById('aiSend').addEventListener('click', ()=>handleAsk(aiInput.value));
+aiInput.addEventListener('keydown', e=>{ if(e.key==='Enter') handleAsk(aiInput.value); });
+
+// delegated clicks: suggestion chips + nav buttons inside chat + section nav
+document.addEventListener('click', (e)=>{
+  const chip = e.target.closest('[data-ask]');
+  if(chip){ handleAsk(chip.dataset.ask); return; }
+  const navBtn = e.target.closest('[data-nav-target]');
+  if(navBtn){
+    const sec = document.getElementById(navBtn.dataset.navTarget);
+    if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
+    return;
+  }
+  const navA = e.target.closest('a[data-nav]');
+  if(navA){
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+});
+
+/* ================================================================
+   NAV / SCROLL BEHAVIOR
+   ================================================================ */
+const topnav = document.getElementById('topnav');
+window.addEventListener('scroll', ()=>{
+  topnav.classList.toggle('scrolled', window.scrollY > 40);
+}, {passive:true});
+
+const mobileToggle = document.getElementById('mobileToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+mobileToggle.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
+
+/* ================================================================
+   SCROLL REVEAL
+   ================================================================ */
+const revealTargets = document.querySelectorAll('.reveal, .reveal-stagger > *');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
+revealTargets.forEach(t=>{ t.classList.add('reveal'); io.observe(t); });
+// hero stats always visible quickly
+document.getElementById('heroStats').classList.add('in');
+
+/* ================================================================
+   CUSTOM CURSOR
+   ================================================================ */
+const cursorDot = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
+const isFinePointer = window.matchMedia('(pointer:fine)').matches;
+if(isFinePointer){
+  let lastX = window.innerWidth/2, lastY = window.innerHeight/2;
+  let pendingX = lastX, pendingY = lastY, rafId = 0;
+  function updateCursor(){
+    rafId = 0;
+    const mx = pendingX, my = pendingY;
+    const vx = mx - lastX, vy = my - lastY;
+    lastX = mx; lastY = my;
+    cursorDot.style.transform = `translate3d(${mx}px, ${my}px, 0) translate(-50%,-50%)`;
+    const speed = Math.min(10, Math.hypot(vx, vy));
+    const angle = Math.atan2(vy, vx) * 180/Math.PI;
+    const stretch = 1 + speed/55;
+    const squash = Math.max(0.9, 1/Math.sqrt(stretch));
+    cursorRing.style.transform =
+      `translate3d(${mx}px, ${my}px, 0) translate(-50%,-50%) rotate(${angle}deg) scale(${stretch}, ${squash})`;
+  }
+  window.addEventListener('pointermove', e=>{
+    pendingX = e.clientX; pendingY = e.clientY;
+    if(!rafId) rafId = requestAnimationFrame(updateCursor);
+  }, {passive:true});
+
+  document.addEventListener('pointerdown', ()=> cursorRing.style.setProperty('transition-duration','.35s'));
+  document.addEventListener('pointerup', ()=> cursorRing.style.removeProperty('transition-duration'));
+
+  window.addEventListener('mouseleave', ()=>{ cursorDot.style.opacity='0'; cursorRing.style.opacity='0'; });
+  window.addEventListener('mouseenter', ()=>{ cursorDot.style.opacity='1'; cursorRing.style.opacity='1'; });
+
+  document.querySelectorAll('[data-hover], a, button, .card').forEach(elx=>{
+    elx.addEventListener('mouseenter', ()=>cursorRing.classList.add('hover'));
+    elx.addEventListener('mouseleave', ()=>cursorRing.classList.remove('hover'));
+  });
+}
+
+/* ================================================================
+   BLOCK HOVER GROUPS — the hovered block pops out & grows,
+   sibling blocks in the same grid dim to make it stand out
+   ================================================================ */
+function setupHoverGroup(containerEl){
+  if(!containerEl) return;
+  const siblingCards = () => Array.from(containerEl.children).filter(c => c.classList.contains('card'));
+  containerEl.addEventListener('mouseover', e=>{
+    const card = e.target.closest('.card');
+    if(!card || card.parentElement !== containerEl) return;
+    siblingCards().forEach(c => c.classList.toggle('dim', c !== card));
+  });
+  containerEl.addEventListener('mouseout', e=>{
+    if(!containerEl.contains(e.relatedTarget)){
+      siblingCards().forEach(c => c.classList.remove('dim'));
+    }
+  });
+  // keyboard focus should behave the same way as hover
+  containerEl.addEventListener('focusin', e=>{
+    const card = e.target.closest('.card');
+    if(!card || card.parentElement !== containerEl) return;
+    siblingCards().forEach(c => c.classList.toggle('dim', c !== card));
+  });
+  containerEl.addEventListener('focusout', e=>{
+    if(!containerEl.contains(e.relatedTarget)){
+      siblingCards().forEach(c => c.classList.remove('dim'));
+    }
+  });
+}
+['skillsGrid','projectList','certGrid','achieveList'].forEach(id => setupHoverGroup(document.getElementById(id)));
+
+/* ================================================================
+   CIRCUIT BACKGROUND — canvas with animated pulses
+   ================================================================ */
+(function circuitEngine(){
+  const canvas = document.getElementById('circuit-layer');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = window.innerWidth < 700;
+
+  let staticCanvas = document.createElement('canvas');
+  let staticCtx = staticCanvas.getContext('2d');
+  let traces = [];   // thin connective wires that carry traveling pulses
+  let bars = [];     // thick glowing PCB-style bar segments (the dense board texture)
+  let bokeh = [];    // soft out-of-focus background glow blobs (depth cue)
+  let pulses = [];
+  let W=0, H=0, DPR = Math.min(window.devicePixelRatio||1, 1.25);
+  let burstTargets = [];
+
+  function docHeight(){
+    return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+  }
+
+  function roundRect(c, x, y, w, h, r){
+    const rr = Math.min(r, Math.abs(w)/2, Math.abs(h)/2);
+    c.beginPath();
+    c.moveTo(x+rr, y);
+    c.arcTo(x+w, y, x+w, y+h, rr);
+    c.arcTo(x+w, y+h, x, y+h, rr);
+    c.arcTo(x, y+h, x, y, rr);
+    c.arcTo(x, y, x+w, y, rr);
+    c.closePath();
+  }
+
+  // Soft, blurred out-of-focus glow blobs — reads as background depth, like a shallow-DOF PCB macro shot
+  function genBokeh(){
+    bokeh = [];
+    const count = isMobile ? 5 : 10;
+    for(let i=0;i<count;i++){
+      const yBias = Math.pow(Math.random(), 1.6); // bias toward top
+      bokeh.push({
+        x: Math.random()*W,
+        y: yBias*H*0.7,
+        r: 30 + Math.random()*90,
+        violet: Math.random() < 0.3,
+        bright: 0.06 + Math.random()*0.16
+      });
+    }
+  }
+
+  // Thick glowing bar clusters — the dense "PCB copper trace" look, with occasional perspective tilt
+  function genBars(){
+    bars = [];
+    const clusterCount = Math.floor((W*H) / (isMobile ? 300000 : 240000));
+    for(let c=0; c<clusterCount; c++){
+      const cx = Math.random()*W;
+      const cy = Math.random()*H;
+      const vertical = Math.random() < 0.55;
+      const barsInCluster = 3 + Math.floor(Math.random()*6);
+      const thickness = 2.5 + Math.random()*2.5;
+      const gap = thickness + 5 + Math.random()*5;
+      const violet = Math.random() < 0.2;
+      // most clusters stay orthogonal (true PCB look); a minority get a slight tilt for perspective/depth
+      const tiltRoll = Math.random();
+      const angle = tiltRoll < 0.78 ? 0 : (tiltRoll < 0.94 ? (Math.random()*14-7) : (Math.random()*40-20));
+      const rad = angle * Math.PI/180;
+      for(let i=0; i<barsInCluster; i++){
+        const len = 40 + Math.random()*170;
+        const offset = i*gap + (Math.random()*4-2);
+        let lx, ly, w, h;
+        if(vertical){ lx = offset; ly = 0; w = thickness; h = len; }
+        else{ lx = 0; ly = offset; w = len; h = thickness; }
+        const litRoll = Math.random();
+        const lit = litRoll < 0.5;
+        const baseBright = lit ? (0.3 + Math.random()*0.55) : (0.04 + Math.random()*0.06);
+        bars.push({
+          cx, cy, lx, ly, w, h, angle: rad, violet,
+          baseBright,
+          active: lit && Math.random() < 0.4,
+          phase: Math.random()*Math.PI*2,
+          speed: 0.5 + Math.random()*1.1
+        });
+      }
+    }
+    // a handful of long, brighter "hero" bars for the elongated glowing-line look
+    const heroCount = isMobile ? 3 : 6;
+    for(let i=0;i<heroCount;i++){
+      const vertical = Math.random() < 0.5;
+      const len = 160 + Math.random()*260;
+      const thickness = 3 + Math.random()*2;
+      const violet = Math.random() < 0.25;
+      bars.push({
+        cx: Math.random()*W, cy: Math.random()*H,
+        lx:0, ly:0,
+        w: vertical ? thickness : len,
+        h: vertical ? len : thickness,
+        angle: Math.random() < 0.85 ? 0 : (Math.random()*10-5),
+        violet,
+        baseBright: 0.55 + Math.random()*0.4,
+        active: Math.random() < 0.5,
+        phase: Math.random()*Math.PI*2,
+        speed: 0.4 + Math.random()*0.8
+      });
+    }
+  }
+
+  // Thin orthogonal wires used purely as rails for traveling light pulses
+  function genTraces(){
+    traces = [];
+    const grid = 46;
+    const density = isMobile ? 0.000008 : 0.000014;
+    const count = Math.min(55, Math.floor(W*H*density));
+    for(let i=0;i<count;i++){
+      const startX = Math.round((Math.random()*W)/grid)*grid;
+      const startY = Math.round((Math.random()*H)/grid)*grid;
+      const segCount = 2 + Math.floor(Math.random()*3);
+      let pts = [{x:startX,y:startY}];
+      let cx=startX, cy=startY;
+      let horizontal = Math.random() < 0.5;
+      for(let s=0; s<segCount; s++){
+        const len = (2 + Math.floor(Math.random()*5)) * grid;
+        if(horizontal){ cx += (Math.random()<0.5? -1:1) * len; }
+        else{ cy += (Math.random()<0.5? -1:1) * len; }
+        cx = Math.max(0, Math.min(W, cx));
+        cy = Math.max(0, Math.min(H, cy));
+        pts.push({x:cx,y:cy});
+        horizontal = !horizontal;
+      }
+      let total = 0;
+      const cum = [0];
+      for(let p=1;p<pts.length;p++){
+        total += Math.hypot(pts[p].x-pts[p-1].x, pts[p].y-pts[p-1].y);
+        cum.push(total);
+      }
+      traces.push({pts, total, cum, violet: Math.random() < 0.3});
+    }
+  }
+
+  function pointAt(trace, dist){
+    const {pts, cum, total} = trace;
+    if(total === 0) return pts[0];
+    let d = Math.max(0, Math.min(total, dist));
+    for(let i=1;i<cum.length;i++){
+      if(d <= cum[i]){
+        const segLen = cum[i]-cum[i-1] || 1;
+        const f = (d-cum[i-1])/segLen;
+        return {
+          x: pts[i-1].x + (pts[i].x-pts[i-1].x)*f,
+          y: pts[i-1].y + (pts[i].y-pts[i-1].y)*f
+        };
+      }
+    }
+    return pts[pts.length-1];
+  }
+
+  function drawBar(c, b, bright, fast){
+    const col = b.violet ? '155,140,249' : '79,231,238';
+    c.save();
+    c.translate(b.cx, b.cy);
+    if(b.angle) c.rotate(b.angle);
+    if(bright > 0.16 && !fast){
+      // soft outer halo for bloom (cheap DOF-style glow) — baked once into the static layer only
+      c.filter = 'blur(7px)';
+      c.globalAlpha = Math.min(1, bright*0.55);
+      roundRect(c, b.lx-2, b.ly-2, b.w+4, b.h+4, Math.min(b.w,b.h)/2+2);
+      c.fillStyle = `rgba(${col},1)`;
+      c.fill();
+      c.filter = 'none';
+      c.globalAlpha = 1;
+    }
+    if(bright > 0.16){
+      c.shadowColor = `rgba(${col},${Math.min(1,bright)})`;
+      c.shadowBlur = fast ? (5 + bright*6) : (6 + bright*8);
+    } else {
+      c.shadowBlur = 0;
+    }
+    roundRect(c, b.lx, b.ly, b.w, b.h, Math.min(b.w,b.h)/2);
+    c.fillStyle = `rgba(${col},${bright})`;
+    c.fill();
+    c.shadowBlur = 0;
+    c.restore();
+  }
+
+  function drawStatic(){
+    staticCanvas.width = W*DPR; staticCanvas.height = H*DPR;
+    staticCtx.setTransform(DPR,0,0,DPR,0,0);
+    staticCtx.clearRect(0,0,W,H);
+
+    // out-of-focus background glow (depth cue)
+    bokeh.forEach(b=>{
+      staticCtx.save();
+      staticCtx.filter = 'blur(28px)';
+      const col = b.violet ? '155,140,249' : '79,231,238';
+      staticCtx.beginPath();
+      staticCtx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+      staticCtx.fillStyle = `rgba(${col},${b.bright})`;
+      staticCtx.fill();
+      staticCtx.restore();
+    });
+
+    // faint board texture: thin connective wires
+    traces.forEach(tr=>{
+      staticCtx.beginPath();
+      tr.pts.forEach((p,i)=> i===0 ? staticCtx.moveTo(p.x,p.y) : staticCtx.lineTo(p.x,p.y));
+      staticCtx.strokeStyle = tr.violet ? 'rgba(139,124,246,0.07)' : 'rgba(79,231,238,0.08)';
+      staticCtx.lineWidth = 1;
+      staticCtx.stroke();
+    });
+
+    // baked-in bars (their resting brightness; active ones get an extra live glow layer on top each frame)
+    bars.forEach(b=> drawBar(staticCtx, b, b.baseBright));
+  }
+
+  function spawnPulse(){
+    if(!traces.length) return;
+    const tr = traces[Math.floor(Math.random()*traces.length)];
+    pulses.push({trace:tr, dist:0, speed: 70 + Math.random()*80});
+  }
+
+  function resize(){
+    W = window.innerWidth;
+    H = docHeight();
+    canvas.style.height = H+'px';
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    genTraces();
+    genBars();
+    genBokeh();
+    drawStatic();
+  }
+
+  let lastT = performance.now();
+  let lastPaint = lastT;
+  function frame(now){
+    requestAnimationFrame(frame);
+    if(document.hidden) return;
+    if(now - lastPaint < 33) return;
+    const dt = Math.min(0.05, (now-lastT)/1000);
+    lastT = now;
+    lastPaint = now;
+
+    ctx.clearRect(0,0,W,H);
+    ctx.drawImage(staticCanvas, 0,0, W, H);
+
+    if(!reduceMotion){
+      // shimmering active bars — small oscillation layered above the baked brightness
+      const t = now/1000;
+      bars.forEach(b=>{
+        if(!b.active) return;
+        const flicker = 0.5 + 0.5*Math.sin(t*b.speed + b.phase);
+        const extra = flicker * 0.35;
+        drawBar(ctx, b, Math.min(1, b.baseBright*0.4 + extra), true);
+      });
+
+      if(Math.random() < 0.035) spawnPulse();
+      pulses.forEach(p=>{ p.dist += p.speed*dt; });
+      pulses = pulses.filter(p=> p.dist < p.trace.total + 20);
+
+      pulses.forEach(p=>{
+        const pos = pointAt(p.trace, p.dist);
+        const grad = ctx.createRadialGradient(pos.x,pos.y,0,pos.x,pos.y,16);
+        const c = p.trace.violet ? '155,140,249' : '79,231,238';
+        grad.addColorStop(0, `rgba(${c},0.95)`);
+        grad.addColorStop(1, `rgba(${c},0)`);
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(pos.x,pos.y,16,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(pos.x,pos.y,2.4,0,Math.PI*2);
+        ctx.fillStyle = `rgba(${c},1)`; ctx.fill();
+      });
+    }
+
+    // burst targets (ambient decoration when AI opens / project expands)
+    burstTargets = burstTargets.filter(b => now - b.born < 900);
+    burstTargets.forEach(b=>{
+      const age = (now-b.born)/900;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y + window.scrollY, 26*(1+age*1.4), 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(79,231,238,${0.35*(1-age)})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    });
+  }
+
+  window.activateCircuitBurst = function(x,y){
+    burstTargets.push({x, y, born: performance.now()});
+  };
+  window.pulseTowards = function(elx){
+    const r = elx.getBoundingClientRect();
+    window.activateCircuitBurst(r.left + r.width/2, r.top + r.height/2);
+  };
+
+  resize();
+  requestAnimationFrame(frame);
+  window.addEventListener('resize', debounce(resize, 250));
+  new ResizeObserver(debounce(resize, 300)).observe(document.body);
+
+  function debounce(fn, wait){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
+})();
+</script>
+</body>
+</html>
